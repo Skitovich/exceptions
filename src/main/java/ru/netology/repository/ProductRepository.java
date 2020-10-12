@@ -27,20 +27,21 @@ public class ProductRepository {
         return null;
     }
 
-
     public Product[] findAll() {
         return items;
     }
 
 
     public void removeById(int id) {
+        if (findById(id) == null)
+            throw new NotFoundException("Element with id: " + id + " not found");
+
         int length = items.length - 1;
         Product[] tmp = new Product[length];
         int index = 0;
         for (Product item : items) {
-            if (findById(id) == null) {
-                throwUnchecked("Element with id: " + id + " not found");
-            }
+
+
             if (item.getId() != id) {
                 tmp[index] = item;
                 index++;
@@ -48,11 +49,5 @@ public class ProductRepository {
         }
         items = tmp;
     }
-
-    public void throwUnchecked(String message) {
-
-        throw new NotFoundException(message);
-    }
-
 
 }

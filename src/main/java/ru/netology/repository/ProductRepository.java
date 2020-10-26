@@ -1,18 +1,17 @@
 package ru.netology.repository;
 
+import ru.netology.domain.Book;
 import ru.netology.domain.Product;
 import ru.netology.exceptions.NotFoundException;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 public class ProductRepository {
-    private Product[] items = new Product[0];
+    public Collection<Product> items = new ArrayList<>();
 
     public void save(Product item) {
-        int length = items.length + 1;
-        Product[] tmp = new Product[length];
-        System.arraycopy(items, 0, tmp, 0, items.length);
-        int lastIndex = tmp.length - 1;
-        tmp[lastIndex] = item;
-        items = tmp;
+        items.add(item);
     }
 
     public Product findById(int id) {
@@ -26,22 +25,17 @@ public class ProductRepository {
     }
 
     public Product[] findAll() {
-        return items;
+        return items.toArray(Product[]::new);
     }
 
     public void removeById(int id) {
-        if (findById(id) == null)
-            throw new NotFoundException("Element with id: " + id + " not found");
-        int length = items.length - 1;
-        Product[] tmp = new Product[length];
-        int index = 0;
-        for (Product item : items) {
-            if (item.getId() != id) {
-                tmp[index] = item;
-                index++;
-            }
-        }
-        items = tmp;
+    items.removeIf(p -> p.getId() == id);
     }
 
+    public void saveAll (Collection<Product> collection) {
+        items.addAll(collection);
+    }
+    public void removeAll (Collection<Product> collection) {
+        items.removeAll(collection);
+    }
 }
